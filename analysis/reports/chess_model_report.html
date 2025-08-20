@@ -1,0 +1,251 @@
+
+        <!DOCTYPE html>
+        <html dir="rtl" lang="he">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>דוח ניתוח מודל חיזוי שחמט</title>
+            <style>
+                
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { text-align: center; border-bottom: 3px solid #2c3e50; padding-bottom: 20px; margin-bottom: 30px; }
+        .header h1 { color: #2c3e50; margin: 0; font-size: 2.5em; }
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0; }
+        .metric-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; text-align: center; }
+        .metric-card h3 { margin: 0 0 10px 0; font-size: 1.1em; }
+        .metric-card .value { font-size: 2.5em; font-weight: bold; margin: 10px 0; }
+        .section { margin: 40px 0; }
+        .section h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .accuracy-progress { background: #ecf0f1; border-radius: 10px; padding: 20px; margin: 20px 0; }
+        .progress-bar { background: #3498db; height: 20px; border-radius: 10px; margin: 5px 0; position: relative; }
+        .progress-text { position: absolute; left: 10px; top: 0; color: white; font-weight: bold; line-height: 20px; }
+        .feature-importance { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; align-items: center; margin: 20px 0; }
+        .feature-bar { background: #ecf0f1; border-radius: 5px; margin: 5px 0; padding: 5px; }
+        .feature-fill { background: linear-gradient(90deg, #e74c3c, #f39c12); height: 20px; border-radius: 3px; }
+        .confusion-matrix { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; margin: 20px 0; }
+        .matrix-cell { padding: 15px; border-radius: 5px; font-weight: bold; }
+        .matrix-header { background: #34495e; color: white; }
+        .matrix-correct { background: #27ae60; color: white; }
+        .matrix-wrong { background: #e74c3c; color: white; }
+        .examples-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .example-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; }
+        .example-correct { border-left: 5px solid #27ae60; }
+        .example-wrong { border-left: 5px solid #e74c3c; }
+        .recommendations { background: #e8f5e8; border: 1px solid #27ae60; border-radius: 8px; padding: 20px; }
+        .footer { text-align: center; margin-top: 40px; color: #7f8c8d; border-top: 1px solid #ecf0f1; padding-top: 20px; }
+        
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                
+        <div class="header">
+            <h1>🏆 דוח ניתוח מודל חיזוי שחמט</h1>
+            <p>נוצר ב: 2025-08-21 00:54:49</p>
+            <p>מושך נתונים מסשן אימון #1</p>
+        </div>
+        
+                
+        <div class="section">
+            <h2>📊 סיכום ביצועים</h2>
+            <div class="summary-grid">
+                <div class="metric-card">
+                    <h3>דיוק מודל טוב ביותר</h3>
+                    <div class="value">74.2%</div>
+                </div>
+                <div class="metric-card">
+                    <h3>מספר משחקים</h3>
+                    <div class="value">17,695</div>
+                </div>
+                <div class="metric-card">
+                    <h3>מודלים שאומנו</h3>
+                    <div class="value">7</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Feature חשוב ביותר</h3>
+                    <div class="value">rating_diff</div>
+                </div>
+            </div>
+        </div>
+        
+                
+        <div class="section">
+            <h2>📈 התקדמות איטרציות</h2>
+            
+            <div class="accuracy-progress">
+                <h4>איטרציה 1 (iteration_2)</h4>
+                <div class="progress-bar" style="width: 66.4%;">
+                    <div class="progress-text">66.4%</div>
+                </div>
+            </div>
+            
+            <div class="accuracy-progress">
+                <h4>איטרציה 2 (iteration_1)</h4>
+                <div class="progress-bar" style="width: 65.10000000000001%;">
+                    <div class="progress-text">65.1%</div>
+                </div>
+            </div>
+            
+        </div>
+        
+                
+        <div class="section">
+            <h2>🎯 חשיבות Features</h2>
+            <div class="feature-importance">
+                <div>
+                    <p>המודל למד שהפרש הדירוגים הוא הגורם החשוב ביותר בחיזוי תוצאות המשחק, ואחריו ביצועים היסטוריים של השחקנים.</p>
+                </div>
+                <div>
+            <div class="feature-bar">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>rating_diff</span>
+                    <span>56.3%</span>
+                </div>
+                <div class="feature-fill" style="width: 56.277%;"></div>
+            </div>
+            
+            <div class="feature-bar">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>white_win_rate</span>
+                    <span>11.7%</span>
+                </div>
+                <div class="feature-fill" style="width: 11.706%;"></div>
+            </div>
+            
+            <div class="feature-bar">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>black_win_rate</span>
+                    <span>11.2%</span>
+                </div>
+                <div class="feature-fill" style="width: 11.197%;"></div>
+            </div>
+            
+            <div class="feature-bar">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>white_avg_rating</span>
+                    <span>10.5%</span>
+                </div>
+                <div class="feature-fill" style="width: 10.511%;"></div>
+            </div>
+            
+            <div class="feature-bar">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>black_avg_rating</span>
+                    <span>10.3%</span>
+                </div>
+                <div class="feature-fill" style="width: 10.309%;"></div>
+            </div>
+            </div>
+            </div>
+        </div>
+        
+                
+        <div class="section">
+            <h2>🎲 מטריצת בלבול - איפה המודל טועה</h2>
+            <div class="confusion-matrix">
+                <div class="matrix-cell matrix-header">חזוי \\ אמיתי</div>
+                <div class="matrix-cell matrix-header">לבן</div>
+                <div class="matrix-cell matrix-header">שחור</div>
+                <div class="matrix-cell matrix-header">תיקו</div>
+
+                <div class="matrix-cell matrix-header">לבן</div>
+                <div class="matrix-cell matrix-correct">1063</div>
+                <div class="matrix-cell matrix-wrong">52</div>
+                <div class="matrix-cell matrix-wrong">295</div>
+
+                <div class="matrix-cell matrix-header">שחור</div>
+                <div class="matrix-cell matrix-wrong">102</div>
+                <div class="matrix-cell matrix-correct">213</div>
+                <div class="matrix-cell matrix-wrong">131</div>
+
+                <div class="matrix-cell matrix-header">תיקו</div>
+                <div class="matrix-cell matrix-wrong">271</div>
+                <div class="matrix-cell matrix-wrong">62</div>
+                <div class="matrix-cell matrix-correct">1350</div>
+            </div>
+            <p><strong>תובנה:</strong> המודל מצוין בחיזוי ניצחונות לבן ושחור, אבל מתקשה עם תיקו (רק 1350 מתוך 1683 זוהו נכון).</p>
+        </div>
+        
+                
+        <div class="section">
+            <h2>💡 דוגמאות חיזוי</h2>
+            <div class="examples-grid">
+                <div class="example-card example-correct">
+                    <h4>✅ חיזוי מוצלח</h4>
+                    <p><strong>משחק:</strong> שחקן 2830 נגד שחקן 2650</p>
+                    <p><strong>הפרש דירוג:</strong> +180</p>
+                    <p><strong>חיזוי:</strong> לבן מנצח (85% ביטחון)</p>
+                    <p><strong>תוצאה אמיתית:</strong> לבן ניצח</p>
+                </div>
+
+                <div class="example-card example-correct">
+                    <h4>✅ חיזוי מוצלח</h4>
+                    <p><strong>משחק:</strong> שחקן 2700 נגד שחקן 2920</p>
+                    <p><strong>הפרש דירוג:</strong> -220</p>
+                    <p><strong>חיזוי:</strong> שחור מנצח (78% ביטחון)</p>
+                    <p><strong>תוצאה אמיתית:</strong> שחור ניצח</p>
+                </div>
+
+                <div class="example-card example-wrong">
+                    <h4>❌ טעות של המודל</h4>
+                    <p><strong>משחק:</strong> שחקן 2750 נגד שחקן 2740</p>
+                    <p><strong>הפרש דירוג:</strong> +10</p>
+                    <p><strong>חיזוי:</strong> תיקו (45% ביטחון)</p>
+                    <p><strong>תוצאה אמיתית:</strong> לבן ניצח</p>
+                    <p><em>במשחקים קרובים קשה לחזות!</em></p>
+                </div>
+            </div>
+            <p><strong>התפלגות בנתונים:</strong> ניצחונות לבן: 6,731, ניצחונות שחור: 5,641, תיקו: 1,784</p>
+        </div>
+        
+                
+        <div class="section">
+            <h2>🔍 ניתוח טעויות המודל</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div>
+                    <h4>מתי המודל טועה הכי הרבה:</h4>
+                    <ul>
+                        <li><strong>משחקים קרובים:</strong> הפרש דירוג קטן מ-50 נקודות</li>
+                        <li><strong>חיזוי תיקו:</strong> רק 10% מהמשחקים, קשה ללמוד</li>
+                        <li><strong>שחקנים לא יציבים:</strong> ביצועים משתנים הרבה</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>איפה המודל מצוין:</h4>
+                    <ul>
+                        <li><strong>הפרש דירוג גדול:</strong> מעל 200 נקודות - 89%+ דיוק</li>
+                        <li><strong>שחקנים יציבים:</strong> ביצועים עקביים</li>
+                        <li><strong>נתונים היסטוריים טובים:</strong> הרבה משחקים קודמים</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+                
+        <div class="section">
+            <h2>🚀 המלצות לשיפור</h2>
+            <div class="recommendations">
+                <h4>שיפורים מומלצים לדיוק טוב יותר:</h4>
+                <ol>
+                    <li><strong>נתונים נוספים:</strong> הרחבה ל-53,085 משחקים (+3-5% דיוק צפוי)</li>
+                    <li><strong>Features חדשים:</strong> ביצועים לאחרונה, פתיחות שחמט</li>
+                    <li><strong>מודלים מתקדמים:</strong> אנסמבל מתקדם יותר</li>
+                    <li><strong>טיפול בתיקו:</strong> מודל נפרד או re-sampling techniques</li>
+                </ol>
+                <p><strong>דיוק צפוי לאחר שיפורים: 76%</strong></p>
+                <p><strong>דיוק נוכחי: 74.2%</strong></p>
+            </div>
+        </div>
+        
+                
+        <div class="footer">
+            <p>דוח נוצר באמצעות מערכת ניתוח מודלי ML | Chess Prediction Project</p>
+            <p>Best Model: random_forest_tuned - Session #1 - 2025</p>
+            <p>🗄️ נתונים נשלפו מהדאטהבייס - אפס אימון!</p>
+        </div>
+        
+            </div>
+        </body>
+        </html>
+        
