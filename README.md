@@ -4,38 +4,42 @@ A machine learning project that predicts chess game outcomes (White wins/Black w
 
 ## Project Overview
 
-This project uses a **Random Forest** model to predict chess game results with **68.7% accuracy** based on:
+This project uses multiple machine learning models including **Random Forest**, **XGBoost**, **Gradient Boosting**, and **Ensemble methods** to predict chess game results with **66-68% accuracy** based on:
 - Player rating differences
 - Historical win rates
 - Average player ratings
 
-Built as a preparation project for an AI thesis, focusing on practical SQL skills, API integration, and machine learning implementation.
+Built as a preparation project for an AI thesis, focusing on practical SQL skills, API integration, machine learning implementation, and automated reporting.
 
-##  Results
+## Results
 
-- **Final Model Accuracy**: 68.7%
-- **Dataset Size**: 4,680 high-quality chess games
-- **Players Analyzed**: 251 active players (1000+ rating)
-- **Feature Importance**: Rating difference (51.6%), Win rates (27.1%)
+- **Best Model Accuracy**: 66-68% (varies by training session)
+- **Dataset Size**: ~17,800 high-quality chess games
+- **Players Analyzed**: 250+ active players (1000+ rating)
+- **Feature Importance**: Rating difference (52-55%), Win rates (25-30%)
+- **Models Trained**: Random Forest iterations, XGBoost, Gradient Boosting, Logistic Regression, Ensemble
 
-##  Architecture
+## Architecture
 
 ```
-Chess.com API → Data Collection → PostgreSQL → Feature Engineering → Random Forest
+Chess.com API → Data Collection → PostgreSQL → Feature Engineering → ML Pipeline → Database Storage → HTML Reports
 ```
 
 ### Key Components:
 - **Data Collection**: Automated player discovery via snowball sampling
-- **Database**: PostgreSQL with optimized schemas for chess data
+- **Database**: PostgreSQL with optimized schemas for chess data and ML results
 - **Feature Engineering**: SQL-based statistical calculations  
-- **ML Pipeline**: Iterative Random Forest training with hyperparameter tuning
+- **ML Pipeline**: Multi-model training with hyperparameter tuning
+- **Results Storage**: Training results persisted in database tables
+- **Automated Reporting**: HTML report generation from stored results
 
-##  Project Structure
+## Project Structure
 
 ```
 chess_project/
 ├── config/
-│   └── database.py              # Database connection management
+│   ├── database.py              # Database connection management
+│   └── create_ml_tables.py      # ML results table creation
 ├── data_collection/
 │   ├── chess_api_client.py      # Chess.com API interface
 │   ├── player_collector.py      # Player discovery system
@@ -44,15 +48,18 @@ chess_project/
 │   ├── db_manager.py            # Database operations
 │   └── schema.sql               # Database schema
 ├── feature_engineering/
-│   └── feature_extractor.py     # Feature preparation
+│   ├── feature_extractor.py     # Feature preparation
+│   └── data_preprocessor.py     # Data preparation for ML
 ├── ml_pipeline/
-│   ├── data_preprocessor.py     # Data preparation for ML
-│   └── model_trainer.py         # Random Forest training
+│   └── model_trainer.py         # Multi-model training with DB storage
+├── analysis/
+│   └── model_reporter.py        # HTML report generation
+├── reports/                     # Generated HTML reports
 └── sql_scripts/
     └── create_tables.sql        # Database setup
 ```
 
-##  Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.8+
@@ -71,68 +78,101 @@ pip install -r requirements.txt
 -- Create database and tables
 CREATE DATABASE chess_db;
 -- Run sql_scripts/create_tables.sql
+-- Run config/create_ml_tables.py for ML results storage
 ```
 
-### Run the Pipeline
+### Run the Complete Pipeline
 ```python
-# Collect players (snowball method)
+# 1. Collect players (snowball method)
 from data_collection.player_collector import PlayerCollector
 collector = PlayerCollector()
 players = collector.snowball_collect_players(target_count=250)
 
-# Collect games
+# 2. Collect games
 from data_collection.game_collector import GameCollector
 game_collector = GameCollector()
-game_collector.collect_all_games(target_games=5000)
+game_collector.collect_all_games(target_games=15000)
 
-# Train model
+# 3. Train models and save results
 from ml_pipeline.model_trainer import ModelTrainer
 trainer = ModelTrainer()
-best_model = trainer.run_full_training_pipeline()
+best_model = trainer.run_full_training_pipeline()  # Automatically saves to DB
+
+# 4. Generate HTML report
+from analysis.model_reporter import generate_latest_report
+report_path = generate_latest_report()  # Fast - reads from DB
 ```
 
-##  Model Performance
+## Model Performance
 
-| Model | Accuracy | Notes |
-|-------|----------|-------|
-| Random Forest (Final) | 68.7% | Best performing model |
-| Random Forest (Baseline) | 65.9% | Initial model |
-| Logistic Regression | 64.4% | Comparison baseline |
+| Model | Typical Accuracy | Notes |
+|-------|------------------|-------|
+| Random Forest (Tuned) | 66-68% | Best performing model |
+| XGBoost | 65-67% | Advanced gradient boosting |
+| Gradient Boosting | 64-66% | Scikit-learn implementation |
+| Ensemble (Voting) | 66-68% | Combines multiple models |
+| Logistic Regression | 63-65% | Baseline comparison |
 
 ### Feature Importance:
-1. **Rating Difference** (51.6%) - Primary predictor
-2. **White Win Rate** (14.1%) - Historical white performance  
-3. **Black Win Rate** (13.0%) - Historical black performance
-4. **Average Ratings** (21.4%) - Combined player strength
+1. **Rating Difference** (52-55%) - Primary predictor
+2. **White Win Rate** (13-15%) - Historical white performance  
+3. **Black Win Rate** (12-14%) - Historical black performance
+4. **White Avg Rating** (10-12%) - Player strength indicator
+5. **Black Avg Rating** (8-10%) - Player strength indicator
 
-##  Technical Highlights
+## Technical Highlights
 
-- **Snowball Sampling**: Discovered 251 players from 12 seed players
+- **Multi-Model Training**: 5-iteration pipeline with advanced algorithms
+- **Hyperparameter Optimization**: GridSearchCV for optimal model parameters
+- **Database-Driven Architecture**: Results stored in PostgreSQL for persistence
+- **Separation of Concerns**: Training and reporting completely decoupled
+- **Fast Report Generation**: HTML reports generated in seconds from stored data
+- **Snowball Sampling**: Discovered 250+ players from 12 seed players
 - **SQL Feature Engineering**: Complex queries for win rates and statistics
-- **Iterative Training**: 3-phase model improvement process
 - **Rate Limited API**: Respectful Chess.com API integration
-- **Clean Architecture**: Separation of concerns across modules
+- **Clean Architecture**: Modular design with clear responsibilities
 
-##  Future Improvements
+## Reporting System
 
-- **More Data**: Expand to 15,000+ games across multiple months
-- **Additional Features**: Opening analysis, time control impact
-- **Advanced Models**: Ensemble methods, neural networks
-- **Real-time Prediction**: Live game outcome prediction
+The project includes an automated HTML reporting system:
 
-##  Technologies Used
+### Database Tables for ML Results:
+- **training_sessions**: Session metadata and best model info
+- **model_performance**: Accuracy and confusion matrices per model
+- **feature_importance**: Feature rankings and importance values
+
+### Report Features:
+- Real-time data from latest training session
+- Interactive confusion matrices
+- Feature importance visualizations
+- Model comparison charts
+- Performance recommendations
+- Hebrew interface with professional styling
+
+## Future Improvements
+
+- **More Data**: Expand to 30,000+ games across multiple months
+- **Additional Features**: Opening analysis, time control impact, player momentum
+- **Advanced Models**: Neural networks, deep learning approaches
+- **Real-time Prediction**: Live game outcome prediction API
+- **Multi-Session Analysis**: Compare training sessions over time
+- **A/B Testing**: Model performance comparison framework
+
+## Technologies Used
 
 - **Python**: Core programming language
-- **PostgreSQL**: Data storage and feature engineering
+- **PostgreSQL**: Data storage, feature engineering, and results persistence
 - **scikit-learn**: Machine learning framework
+- **XGBoost**: Advanced gradient boosting
 - **pandas/numpy**: Data manipulation
 - **Chess.com API**: Game data source
+- **HTML/CSS**: Professional report generation
 
-##  License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-##  Contributing
+## Contributing
 
 Contributions welcome! Please feel free to submit a Pull Request.
 
